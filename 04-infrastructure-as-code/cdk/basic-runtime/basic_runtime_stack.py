@@ -15,7 +15,7 @@ from aws_cdk import (
 from constructs import Construct
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), 'infra-utils'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'infra_utils'))
 from agentcore_role import AgentCoreRole
 
 class BasicRuntimeStack(Stack):
@@ -153,7 +153,7 @@ class BasicRuntimeStack(Stack):
         # Lambda function to trigger and wait for CodeBuild
         build_trigger_function = lambda_.Function(self, "BuildTriggerFunction",
             runtime=lambda_.Runtime.PYTHON_3_9,
-            handler="infra-utils/build_trigger_lambda.handler",
+            handler="infra_utils.build_trigger_lambda.handler",
             timeout=Duration.minutes(15),
             code=lambda_.Code.from_asset(".", exclude=["*.pyc", "__pycache__", "cdk.out"]),
             initial_policy=[
