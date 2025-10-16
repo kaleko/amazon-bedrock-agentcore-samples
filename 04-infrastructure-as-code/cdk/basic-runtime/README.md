@@ -123,12 +123,7 @@ cdk list
 
 ### Deployment Time
 
-- **Expected Duration**: 10-15 minutes
-- **Main Steps**:
-  - CDK synthesis and asset upload: ~2 minutes
-  - Stack creation: ~2 minutes
-  - Docker image build (CodeBuild): ~8-10 minutes
-  - Runtime provisioning: ~2-3 minutes
+- **Expected Duration**: 3-5 minutes
 
 ## Testing
 
