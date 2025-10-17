@@ -3,8 +3,8 @@ FROM public.ecr.aws/docker/library/python:3.11-slim
 WORKDIR /app
 
 COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
-RUN pip install aws-opentelemetry-distro>=0.10.1
+RUN pip install --no-cache-dir -r requirements.txt && \
+    pip install --no-cache-dir aws-opentelemetry-distro==0.10.1
 
 ENV AWS_REGION=us-west-2
 ENV AWS_DEFAULT_REGION=us-west-2
@@ -17,5 +17,8 @@ EXPOSE 8080
 EXPOSE 8000
 
 COPY . .
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:8080/ping || exit 1
 
 CMD ["opentelemetry-instrument", "python", "-m", "basic_agent"]
