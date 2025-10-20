@@ -61,7 +61,7 @@ The architecture consists of:
    aws configure
    ```
 
-3. **Python 3.8+** and **AWS CDK v2** installed
+3. **Python 3.10+** and **AWS CDK v2** installed
    ```bash
    # Install CDK
    npm install -g aws-cdk
@@ -73,9 +73,6 @@ The architecture consists of:
 4. **CDK version 2.218.0 or later** (for BedrockAgentCore support)
 
 5. **Bedrock Model Access**: Enable access to Amazon Bedrock models in your AWS region
-   - Navigate to [Amazon Bedrock Console](https://console.aws.amazon.com/bedrock/)
-   - Go to "Model access" and request access to:
-     - Anthropic Claude models (recommended: Claude 3.5 Sonnet or Claude 3 Haiku)
    - [Bedrock Model Access Guide](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html)
 
 6. **Required Permissions**: Your AWS user/role needs permissions for:
@@ -105,7 +102,11 @@ cdk deploy
 ### Option 2: Step by Step
 
 ```bash
-# 1. Install Python dependencies
+# 1. Create and activate Python virtual environment
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# 2. Install Python dependencies
 pip install -r requirements.txt
 
 # 2. Bootstrap CDK in your account/region (first time only)
@@ -130,19 +131,18 @@ cdk list
 ### Using AWS CLI
 
 ```bash
-# Get the Runtime ID from CDK outputs
-RUNTIME_ID=$(aws cloudformation describe-stacks \
+# Get the Runtime ARN from CDK outputs
+RUNTIME_ARN=$(aws cloudformation describe-stacks \
   --stack-name BasicAgentDemo \
   --region us-east-1 \
-  --query 'Stacks[0].Outputs[?OutputKey==`AgentRuntimeId`].OutputValue' \
+  --query 'Stacks[0].Outputs[?OutputKey==`AgentRuntimeArn`].OutputValue' \
   --output text)
 
 # Invoke the agent
 aws bedrock-agentcore invoke-agent-runtime \
-  --agent-runtime-id $RUNTIME_ID \
+  --agent-runtime-arn $RUNTIME_ARN \
   --qualifier DEFAULT \
-  --payload '{"prompt": "What is 2+2?"}' \
-  --region us-east-1 \
+  --payload $(echo '{"prompt": "What is 2+2?"}' | base64) \
   response.json
 
 # View the response
