@@ -11,7 +11,10 @@ This CDK stack demonstrates a multi-agent architecture where one agent (orchestr
 - [Testing](#testing)
 - [Sample Queries](#sample-queries)
 - [Cleanup](#cleanup)
+- [Cost Estimate](#cost-estimate)
 - [Troubleshooting](#troubleshooting)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
 
 ## Overview
 
@@ -41,6 +44,8 @@ This CDK stack creates a two-agent system that demonstrates agent-to-agent commu
 - **Modular Architecture**: Easy to extend with additional specialized agents
 
 ## Architecture
+
+![Multi-Agent AgentCore Runtime Architecture](architecture.png)
 
 The architecture consists of:
 
@@ -91,6 +96,9 @@ The architecture consists of:
 4. **CDK version 2.220.0 or later** (for BedrockAgentCore support)
 
 5. **Bedrock Model Access**: Enable access to Amazon Bedrock models in your AWS region
+   - Navigate to [Amazon Bedrock Console](https://console.aws.amazon.com/bedrock/)
+   - Go to "Model access" and request access to:
+     - Anthropic Claude models
    - [Bedrock Model Access Guide](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html)
 
 6. **Required Permissions**: Your AWS user/role needs permissions for:
@@ -102,6 +110,10 @@ The architecture consists of:
    - BedrockAgentCore resource creation
 
 ## Deployment
+
+### CDK vs CloudFormation
+
+This is the **CDK version** of the multi-agent runtime. If you prefer CloudFormation, see the [CloudFormation version](../../cloudformation/multi-agent-runtime/).
 
 ### Option 1: Quick Deploy (Recommended)
 
@@ -286,6 +298,29 @@ aws cloudformation wait stack-delete-complete \
 3. Click "Delete"
 4. Confirm deletion
 
+## Cost Estimate
+
+### Monthly Cost Breakdown (us-east-1)
+
+| Service | Usage | Monthly Cost |
+|---------|-------|--------------|
+| **AgentCore Runtimes** | 2 runtimes, minimal usage | ~$10-20 |
+| **ECR Repositories** | 2 repositories, <2GB storage | ~$0.20 |
+| **CodeBuild** | Occasional builds | ~$2-4 |
+| **Lambda** | Custom resource executions | ~$0.01 |
+| **CloudWatch Logs** | Agent logs | ~$1.00 |
+| **Bedrock Model Usage** | Pay per token | Variable* |
+
+**Estimated Total: ~$13-25/month** (excluding Bedrock model usage)
+
+*Bedrock costs depend on your usage patterns and chosen models. See [Bedrock Pricing](https://aws.amazon.com/bedrock/pricing/) for details.
+
+### Cost Optimization Tips
+
+- **Delete when not in use**: Use `cdk destroy` to remove all resources
+- **Monitor usage**: Set up CloudWatch billing alarms
+- **Choose efficient models**: Select appropriate Bedrock models for your use case
+
 ## Troubleshooting
 
 ### CDK Bootstrap Required
@@ -315,3 +350,18 @@ Check CodeBuild logs in the AWS Console:
 1. Go to CodeBuild console
 2. Find the build projects (names contain "agent1-build" and "agent2-build")
 3. Check build history and logs
+
+### Agent Communication Issues
+
+If Agent 1 can't invoke Agent 2:
+1. Check IAM permissions for `bedrock-agentcore:InvokeAgentRuntime`
+2. Verify Agent 2 runtime is running
+3. Check CloudWatch logs for both agents
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](../../CONTRIBUTING.md) for details.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](../../LICENSE) file for details.

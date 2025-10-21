@@ -112,6 +112,10 @@ The architecture demonstrates a complete AgentCore deployment with multiple inte
 
 ## Deployment
 
+### CDK vs CloudFormation
+
+This is the **CDK version** of the end-to-end weather agent. If you prefer CloudFormation, see the [CloudFormation version](../../cloudformation/end-to-end-weather-agent/).
+
 ### Option 1: Quick Deploy (Recommended)
 
 ```bash
