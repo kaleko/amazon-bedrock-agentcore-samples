@@ -2,7 +2,6 @@
 
 import boto3
 import json
-import time
 
 def test_multi_agent():
     """Test the multi-agent system"""

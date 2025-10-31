@@ -5,7 +5,6 @@ from aws_cdk import (
     aws_iam as iam,
     aws_lambda as lambda_,
     aws_cognito as cognito,
-    aws_s3_assets as s3_assets,
     aws_bedrockagentcore as bedrockagentcore,
     CustomResource,
     CfnParameter,
@@ -17,7 +16,6 @@ from constructs import Construct
 import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), 'infra_utils'))
-from agentcore_role import AgentCoreRole
 
 class MCPServerStack(Stack):
 
